@@ -10,7 +10,7 @@ This tool was created during a PC migration to help identify all VST plugins use
 
 ## Features
 
-> **💡 Note:** This tool was created during a PC migration to help identify all VST plugins used across multiple Ableton Live projects. The "VST Requirements for New PC" feature was specifically designed for this use case.
+
 
 ### 🚀 Performance-Optimized
 - ✅ **Multi-Threading**: Processes hundreds of projects in parallel (up to 16 threads)
