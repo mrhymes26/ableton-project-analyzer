@@ -47,8 +47,35 @@ if "%~1"=="" (
 REM Get the folder path
 set "PROJECT_PATH=%~1"
 
+REM Remove quotes if present
+set "PROJECT_PATH=%PROJECT_PATH:"=%"
+
+REM Check if path exists
+if not exist "%PROJECT_PATH%" (
+    echo [ERROR] Path does not exist: %PROJECT_PATH%
+    pause
+    exit /b 1
+)
+
+REM Check if it's a folder (ends with backslash) or file
+echo %PROJECT_PATH%| findstr /R "\\$" >nul
+if errorlevel 1 (
+    REM No trailing backslash - might be a file, check if it's a folder
+    if exist "%PROJECT_PATH%\" (
+        REM It's a folder, add backslash
+        set "PROJECT_PATH=%PROJECT_PATH%\"
+    ) else (
+        REM It's a file, get parent folder
+        for %%F in ("%PROJECT_PATH%") do set "PROJECT_PATH=%%~dpF"
+    )
+)
+
+REM Remove trailing backslash for processing
+set "PROJECT_PATH_CLEAN=%PROJECT_PATH%"
+if "%PROJECT_PATH_CLEAN:~-1%"=="\" set "PROJECT_PATH_CLEAN=%PROJECT_PATH_CLEAN:~0,-1%"
+
 REM Create output filename based on folder name
-for %%F in ("%PROJECT_PATH%") do set "FOLDER_NAME=%%~nxF"
+for %%F in ("%PROJECT_PATH_CLEAN%") do set "FOLDER_NAME=%%~nxF"
 set "OUTPUT_FILE=%FOLDER_NAME%_VST_Analysis.xlsx"
 
 echo.
@@ -56,12 +83,12 @@ echo ============================================================
 echo Ableton Project Analyzer
 echo ============================================================
 echo.
-echo Analyzing projects in: %PROJECT_PATH%
+echo Analyzing projects in: %PROJECT_PATH_CLEAN%
 echo Output file: %OUTPUT_FILE%
 echo.
 
 REM Run the analyzer
-python ableton_project_analyzer.py "%PROJECT_PATH%" --excel "%OUTPUT_FILE%" --workers 8
+python ableton_project_analyzer.py "%PROJECT_PATH_CLEAN%" --excel "%OUTPUT_FILE%" --workers 8
 
 if errorlevel 1 (
     echo.

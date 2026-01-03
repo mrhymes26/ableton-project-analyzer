@@ -650,19 +650,19 @@ class AbletonProjectAnalyzer:
             # Entferne Standard-Sheet
             wb.remove(wb.active)
             
-            # 1. Projekt-Übersicht
+            # 1. Project Overview
             self.create_project_overview_sheet(wb)
             
-            # 2. VST-Übersicht
+            # 2. VST Overview
             self.create_vst_overview_sheet(wb)
             
-            # 3. Track-Details
+            # 3. Track Details
             self.create_track_details_sheet(wb)
             
-            # 4. VST-Bedarf für neuen PC
+            # 4. VST Requirements for New PC
             self.create_vst_requirements_sheet(wb)
             
-            # 5. Statistiken
+            # 5. Statistics
             self.create_statistics_sheet(wb)
             
             # Speichere Excel-Datei
@@ -673,11 +673,11 @@ class AbletonProjectAnalyzer:
             print(f"Fehler beim Erstellen der Excel-Datei: {e}")
     
     def create_project_overview_sheet(self, wb: Workbook) -> None:
-        """Erstellt Projekt-Übersicht-Sheet"""
-        ws = wb.create_sheet("Projekt-Übersicht")
+        """Creates Project Overview Sheet"""
+        ws = wb.create_sheet("Project Overview")
         
         # Header
-        headers = ["Projekt", "Pfad", "Tracks", "Scenes", "VSTs", "Hauptverzeichnis"]
+        headers = ["Project", "Path", "Tracks", "Scenes", "VSTs", "Main Directory"]
         for col, header in enumerate(headers, 1):
             cell = ws.cell(row=1, column=col, value=header)
             cell.font = Font(bold=True, color="FFFFFF")
@@ -716,35 +716,35 @@ class AbletonProjectAnalyzer:
             ws.column_dimensions[column_letter].width = adjusted_width
     
     def create_vst_overview_sheet(self, wb: Workbook) -> None:
-        """Erstellt VST-Übersicht-Sheet"""
-        ws = wb.create_sheet("VST-Übersicht")
+        """Creates VST Overview Sheet"""
+        ws = wb.create_sheet("VST Overview")
         
-        # Sammle alle VSTs mit Details
+        # Collect all VSTs with details
         vst_data = []
         for project in self.projects:
             for vst in project['vsts']:
                 vst_data.append({
-                    'Projekt': project['name'],
-                    'Hersteller': vst['manufacturer'],
-                    'VST-Name': vst['name'],
-                    'Dateiname': vst.get('filename', ''),
+                    'Project': project['name'],
+                    'Manufacturer': vst['manufacturer'],
+                    'VST Name': vst['name'],
+                    'Filename': vst.get('filename', ''),
                     'Version': vst.get('version', '')
                 })
         
         # Header
-        headers = ["Projekt", "Hersteller", "VST-Name", "Dateiname", "Version"]
+        headers = ["Project", "Manufacturer", "VST Name", "Filename", "Version"]
         for col, header in enumerate(headers, 1):
             cell = ws.cell(row=1, column=col, value=header)
             cell.font = Font(bold=True, color="FFFFFF")
             cell.fill = PatternFill(start_color="70AD47", end_color="70AD47", fill_type="solid")
             cell.alignment = Alignment(horizontal="center")
         
-        # Daten
+        # Data
         for row, vst in enumerate(vst_data, 2):
-            ws.cell(row=row, column=1, value=vst['Projekt'])
-            ws.cell(row=row, column=2, value=vst['Hersteller'])
-            ws.cell(row=row, column=3, value=vst['VST-Name'])
-            ws.cell(row=row, column=4, value=vst['Dateiname'])
+            ws.cell(row=row, column=1, value=vst['Project'])
+            ws.cell(row=row, column=2, value=vst['Manufacturer'])
+            ws.cell(row=row, column=3, value=vst['VST Name'])
+            ws.cell(row=row, column=4, value=vst['Filename'])
             ws.cell(row=row, column=5, value=vst['Version'])
         
         # Auto-fit Spalten
@@ -761,35 +761,35 @@ class AbletonProjectAnalyzer:
             ws.column_dimensions[column_letter].width = adjusted_width
     
     def create_track_details_sheet(self, wb: Workbook) -> None:
-        """Erstellt Track-Details-Sheet"""
-        ws = wb.create_sheet("Track-Details")
+        """Creates Track Details Sheet"""
+        ws = wb.create_sheet("Track Details")
         
-        # Sammle alle Track-Daten
+        # Collect all track data
         track_data = []
         for project in self.projects:
             for track in project['tracks']:
                 track_data.append({
-                    'Projekt': project['name'],
-                    'Track-Name': track['name'],
-                    'Track-Typ': track['type'],
-                    'VST-Anzahl': len(track['vsts']),
+                    'Project': project['name'],
+                    'Track Name': track['name'],
+                    'Track Type': track['type'],
+                    'VST Count': len(track['vsts']),
                     'VSTs': ', '.join([f"{vst['manufacturer']} - {vst['name']}" for vst in track['vsts']])
                 })
         
         # Header
-        headers = ["Projekt", "Track-Name", "Track-Typ", "VST-Anzahl", "VSTs"]
+        headers = ["Project", "Track Name", "Track Type", "VST Count", "VSTs"]
         for col, header in enumerate(headers, 1):
             cell = ws.cell(row=1, column=col, value=header)
             cell.font = Font(bold=True, color="FFFFFF")
             cell.fill = PatternFill(start_color="C55A11", end_color="C55A11", fill_type="solid")
             cell.alignment = Alignment(horizontal="center")
         
-        # Daten
+        # Data
         for row, track in enumerate(track_data, 2):
-            ws.cell(row=row, column=1, value=track['Projekt'])
-            ws.cell(row=row, column=2, value=track['Track-Name'])
-            ws.cell(row=row, column=3, value=track['Track-Typ'])
-            ws.cell(row=row, column=4, value=track['VST-Anzahl'])
+            ws.cell(row=row, column=1, value=track['Project'])
+            ws.cell(row=row, column=2, value=track['Track Name'])
+            ws.cell(row=row, column=3, value=track['Track Type'])
+            ws.cell(row=row, column=4, value=track['VST Count'])
             ws.cell(row=row, column=5, value=track['VSTs'])
         
         # Auto-fit Spalten
@@ -806,47 +806,47 @@ class AbletonProjectAnalyzer:
             ws.column_dimensions[column_letter].width = adjusted_width
     
     def create_vst_requirements_sheet(self, wb: Workbook) -> None:
-        """Erstellt VST-Bedarf-Sheet"""
-        ws = wb.create_sheet("VST-Bedarf für neuen PC")
+        """Creates VST Requirements Sheet"""
+        ws = wb.create_sheet("VST Requirements for New PC")
         
-        # Sammle VST-Statistiken
+        # Collect VST statistics
         vst_stats = {}
         for project in self.projects:
             for vst in project['vsts']:
                 vst_key = f"{vst['manufacturer']} - {vst['name']}"
                 if vst_key not in vst_stats:
                     vst_stats[vst_key] = {
-                        'Hersteller': vst['manufacturer'],
-                        'VST-Name': vst['name'],
-                        'Dateiname': vst.get('filename', ''),
+                        'Manufacturer': vst['manufacturer'],
+                        'VST Name': vst['name'],
+                        'Filename': vst.get('filename', ''),
                         'Version': vst.get('version', ''),
-                        'Verwendungen': 0,
-                        'Projekte': set()
+                        'Usage Count': 0,
+                        'Projects': set()
                     }
-                vst_stats[vst_key]['Verwendungen'] += 1
-                vst_stats[vst_key]['Projekte'].add(project['name'])
+                vst_stats[vst_key]['Usage Count'] += 1
+                vst_stats[vst_key]['Projects'].add(project['name'])
         
-        # Sortiere nach Häufigkeit
-        sorted_vsts = sorted(vst_stats.items(), key=lambda x: x[1]['Verwendungen'], reverse=True)
+        # Sort by frequency
+        sorted_vsts = sorted(vst_stats.items(), key=lambda x: x[1]['Usage Count'], reverse=True)
         
         # Header
-        headers = ["Rang", "Hersteller", "VST-Name", "Dateiname", "Version", "Verwendungen", "Projekte"]
+        headers = ["Rank", "Manufacturer", "VST Name", "Filename", "Version", "Usage Count", "Projects"]
         for col, header in enumerate(headers, 1):
             cell = ws.cell(row=1, column=col, value=header)
             cell.font = Font(bold=True, color="FFFFFF")
             cell.fill = PatternFill(start_color="E74C3C", end_color="E74C3C", fill_type="solid")
             cell.alignment = Alignment(horizontal="center")
         
-        # Daten
+        # Data
         for rank, (vst_key, data) in enumerate(sorted_vsts, 1):
             row = rank + 1
             ws.cell(row=row, column=1, value=rank)
-            ws.cell(row=row, column=2, value=data['Hersteller'])
-            ws.cell(row=row, column=3, value=data['VST-Name'])
-            ws.cell(row=row, column=4, value=data['Dateiname'])
+            ws.cell(row=row, column=2, value=data['Manufacturer'])
+            ws.cell(row=row, column=3, value=data['VST Name'])
+            ws.cell(row=row, column=4, value=data['Filename'])
             ws.cell(row=row, column=5, value=data['Version'])
-            ws.cell(row=row, column=6, value=data['Verwendungen'])
-            ws.cell(row=row, column=7, value=', '.join(sorted(data['Projekte'])))
+            ws.cell(row=row, column=6, value=data['Usage Count'])
+            ws.cell(row=row, column=7, value=', '.join(sorted(data['Projects'])))
         
         # Auto-fit Spalten
         for column in ws.columns:
@@ -862,15 +862,15 @@ class AbletonProjectAnalyzer:
             ws.column_dimensions[column_letter].width = adjusted_width
     
     def create_statistics_sheet(self, wb: Workbook) -> None:
-        """Erstellt Statistiken-Sheet"""
-        ws = wb.create_sheet("Statistiken")
+        """Creates Statistics Sheet"""
+        ws = wb.create_sheet("Statistics")
         
-        # Berechne Statistiken
+        # Calculate statistics
         total_projects = len(self.projects)
         total_vsts = len(self.all_vsts)
         total_tracks = sum(len(project['tracks']) for project in self.projects)
         
-        # Hersteller-Statistiken
+        # Manufacturer statistics
         manufacturer_stats = {}
         for project in self.projects:
             for vst in project['vsts']:
@@ -880,17 +880,17 @@ class AbletonProjectAnalyzer:
                 manufacturer_stats[manufacturer] += 1
         
         # Header
-        ws.cell(row=1, column=1, value="ABLETON STUDIO - VST ANALYSE STATISTIKEN")
+        ws.cell(row=1, column=1, value="ABLETON STUDIO - VST ANALYSIS STATISTICS")
         ws.cell(row=1, column=1).font = Font(bold=True, size=16, color="FFFFFF")
         ws.cell(row=1, column=1).fill = PatternFill(start_color="2C3E50", end_color="2C3E50", fill_type="solid")
         
-        # Allgemeine Statistiken
+        # General statistics
         stats_data = [
-            ("Gesamtprojekte", total_projects),
-            ("Verschiedene VSTs", total_vsts),
-            ("Gesamte Tracks", total_tracks),
-            ("Durchschnitt VSTs pro Projekt", round(sum(len(p['vsts']) for p in self.projects) / total_projects, 2) if total_projects > 0 else 0),
-            ("Durchschnitt Tracks pro Projekt", round(total_tracks / total_projects, 2) if total_projects > 0 else 0)
+            ("Total Projects", total_projects),
+            ("Different VSTs", total_vsts),
+            ("Total Tracks", total_tracks),
+            ("Average VSTs per Project", round(sum(len(p['vsts']) for p in self.projects) / total_projects, 2) if total_projects > 0 else 0),
+            ("Average Tracks per Project", round(total_tracks / total_projects, 2) if total_projects > 0 else 0)
         ]
         
         for row, (label, value) in enumerate(stats_data, 3):
@@ -898,12 +898,12 @@ class AbletonProjectAnalyzer:
             ws.cell(row=row, column=2, value=value)
             ws.cell(row=row, column=1).font = Font(bold=True)
         
-        # Hersteller-Statistiken
-        ws.cell(row=9, column=1, value="VST-HERSTELLER STATISTIKEN")
+        # Manufacturer statistics
+        ws.cell(row=9, column=1, value="VST MANUFACTURER STATISTICS")
         ws.cell(row=9, column=1).font = Font(bold=True, size=14)
         
-        ws.cell(row=10, column=1, value="Hersteller")
-        ws.cell(row=10, column=2, value="Anzahl VSTs")
+        ws.cell(row=10, column=1, value="Manufacturer")
+        ws.cell(row=10, column=2, value="VST Count")
         ws.cell(row=10, column=1).font = Font(bold=True)
         ws.cell(row=10, column=2).font = Font(bold=True)
         

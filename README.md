@@ -237,4 +237,14 @@ MIT License - Free to use for private and commercial purposes.
 
 ---
 
+## ☕ Support
+
+If you find this tool helpful and would like to support its development, you can buy me a coffee:
+
+**[☕ Buy Me a Coffee](https://buymeacoffee.com/mrhymes)**
+
+Your support is greatly appreciated! 🙏
+
+---
+
 **Good luck with your projects!** 🎵
