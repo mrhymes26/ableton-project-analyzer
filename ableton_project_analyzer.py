@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Ableton Live Project Analyzer - OPTIMIERT FÜR GESCHWINDIGKEIT
-Analysiert Ableton Live-Projekte und extrahiert verwendete VST-Plugins
+Ableton Live Project Analyzer - OPTIMIZED FOR SPEED
+Analyzes Ableton Live projects and extracts used VST plugins
 """
 
 import os
@@ -29,14 +29,14 @@ class AbletonProjectAnalyzer:
         self.lock = threading.Lock()
         
     def find_ableton_projects(self) -> List[Path]:
-        """Findet alle Ableton Live-Projekte im angegebenen Verzeichnis"""
+        """Finds all Ableton Live projects in the specified directory"""
         projects = []
         for file_path in self.project_path.rglob("*.als"):
             projects.append(file_path)
         return projects
     
     def extract_project_info(self, project_file: Path) -> Optional[Dict]:
-        """Extrahiert Informationen aus einer Ableton-Projektdatei - OPTIMIERT"""
+        """Extracts information from an Ableton project file - OPTIMIZED"""
         try:
             # Schnelle Header-Erkennung
             with open(project_file, 'rb') as f:
@@ -46,7 +46,7 @@ class AbletonProjectAnalyzer:
             if header.startswith(b'PK'):
                 return self.extract_from_zip_fast(project_file)
             
-            # GZIP-Datei (ältere Ableton-Versionen)  
+            # GZIP file (older Ableton versions)  
             elif header.startswith(b'\x1f\x8b'):
                 return self.extract_from_gzip_fast(project_file)
             
@@ -125,7 +125,7 @@ class AbletonProjectAnalyzer:
             if plug_name_elem is not None and 'Value' in plug_name_elem.attrib:
                 plugin_data['name'] = plug_name_elem.attrib['Value']
             else:
-                continue  # Überspringe wenn kein Name gefunden
+                continue  # Skip if no name found
             
             # Dateiname
             file_name_elem = vst_info.find('FileName')
@@ -177,7 +177,7 @@ class AbletonProjectAnalyzer:
             './/MidiTrack', 
             './/ReturnTrack',
             './/MasterTrack',
-            './/Track'  # Fallback für alle Tracks
+            './/Track'  # Fallback for all tracks
         ]
         
         for track_type in track_types:
@@ -274,48 +274,48 @@ class AbletonProjectAnalyzer:
         return plugin_data
     
     def analyze_projects(self, quiet: bool = False, max_workers: int = 16) -> None:
-        """Analysiert alle gefundenen Projekte parallel - OPTIMIERT für Geschwindigkeit"""
-        print(f"Suche nach Ableton-Projekten in: {self.project_path}")
+        """Analyzes all found projects in parallel - OPTIMIZED for speed"""
+        print(f"Searching for Ableton projects in: {self.project_path}")
         project_files = self.find_ableton_projects()
         
         if not project_files:
-            print("Keine Ableton-Projekte gefunden!")
+            print("No Ableton projects found!")
             return
         
-        print(f"Gefunden: {len(project_files)} Projekt(e)")
-        print(f"Starte parallele Analyse mit {max_workers} Threads...")
+        print(f"Found: {len(project_files)} project(s)")
+        print(f"Starting parallel analysis with {max_workers} threads...")
         
-        # Batch-Verarbeitung für bessere Performance
+        # Batch processing for better performance
         batch_size = max(1, len(project_files) // max_workers)
         completed = 0
         
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            # Batch-Verarbeitung statt einzelne Projekte
+            # Batch processing instead of individual projects
             futures = []
             for i in range(0, len(project_files), batch_size):
                 batch = project_files[i:i + batch_size]
                 future = executor.submit(self.process_batch, batch)
                 futures.append(future)
             
-            # Sammle Ergebnisse
+            # Collect results
             for future in as_completed(futures):
                 try:
                     batch_results = future.result()
                     completed += len(batch_results)
                     
                     if not quiet:
-                        print(f"Fortschritt: {completed}/{len(project_files)} Projekte analysiert")
-                    elif completed % 200 == 0:  # Weniger häufige Updates
-                        print(f"Fortschritt: {completed}/{len(project_files)} Projekte analysiert...")
+                        print(f"Progress: {completed}/{len(project_files)} projects analyzed")
+                    elif completed % 200 == 0:  # Less frequent updates
+                        print(f"Progress: {completed}/{len(project_files)} projects analyzed...")
                         
                 except Exception as e:
                     if not quiet:
-                        print(f"Batch-Fehler: {e}")
+                        print(f"Batch error: {e}")
         
-        print(f"Analyse abgeschlossen: {len(self.projects)} Projekte erfolgreich verarbeitet")
+        print(f"Analysis complete: {len(self.projects)} projects successfully processed")
     
     def process_batch(self, project_batch: List[Path]) -> List[Dict]:
-        """Verarbeitet einen Batch von Projekten"""
+        """Processes a batch of projects"""
         batch_results = []
         for project_file in project_batch:
             try:
@@ -323,10 +323,10 @@ class AbletonProjectAnalyzer:
                 if project_info:
                     batch_results.append(project_info)
             except Exception:
-                # Stille Fehlerbehandlung für bessere Performance
+                # Silent error handling for better performance
                 pass
         
-        # Thread-safe Hinzufügung zur Hauptliste
+        # Thread-safe addition to main list
         with self.lock:
             self.projects.extend(batch_results)
         
@@ -335,21 +335,21 @@ class AbletonProjectAnalyzer:
     def print_summary(self) -> None:
         """Druckt eine Zusammenfassung der Analyse"""
         if not self.projects:
-            print("Keine Projekte analysiert!")
+            print("No projects analyzed!")
             return
         
         total_vsts = sum(len(project['vsts']) for project in self.projects)
         
-        print("\n=== ZUSAMMENFASSUNG ===")
-        print(f"Analysierte Projekte: {len(self.projects)}")
-        print(f"Gesamtanzahl VSTs: {len(self.all_vsts)}")
-        
-        print("\n=== ALLE VERWENDETEN VSTs ===")
+        print("\n=== SUMMARY ===")
+        print(f"Analyzed projects: {len(self.projects)}")
+        print(f"Total VSTs: {len(self.all_vsts)}")
+
+        print("\n=== ALL USED VSTs ===")
         for vst in sorted(self.all_vsts):
             print(f"- {vst}")
     
     def export_to_json(self, filename: str) -> None:
-        """Exportiert die Analyseergebnisse als JSON"""
+        """Exports analysis results as JSON"""
         data = {
             'timestamp': datetime.now().isoformat(),
             'project_path': str(self.project_path),
@@ -362,10 +362,10 @@ class AbletonProjectAnalyzer:
         with open(filename, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
         
-        print(f"Ergebnisse wurden in {filename} gespeichert!")
+        print(f"Results saved to {filename}!")
     
     def export_vst_lists_recursive(self, base_output_dir: str = "vst_lists") -> None:
-        """Exportiert VST-Listen rekursiv für alle Hauptverzeichnisse"""
+        """Exports VST lists recursively for all main directories"""
         base_path = Path(base_output_dir)
         base_path.mkdir(exist_ok=True)
         
@@ -391,15 +391,15 @@ class AbletonProjectAnalyzer:
         
         total_exported = 0
         
-        # Erstelle für jedes Hauptverzeichnis einen Unterordner
+        # Create a subdirectory for each main directory
         for main_dir, projects in projects_by_main_dir.items():
             main_dir_path = base_path / main_dir
             main_dir_path.mkdir(exist_ok=True)
             
-            print(f"\nVerarbeite Hauptverzeichnis: {main_dir} ({len(projects)} Projekte)")
+            print(f"\nProcessing main directory: {main_dir} ({len(projects)} projects)")
             
             exported_count = 0
-            # Erstelle alle VST-Listen für dieses Hauptverzeichnis parallel
+            # Create all VST lists for this main directory in parallel
             for project in projects:
                 # Erstelle Dateiname basierend auf Projektname
                 safe_name = "".join(c for c in project['name'] if c.isalnum() or c in (' ', '-', '_')).rstrip()
@@ -408,18 +408,18 @@ class AbletonProjectAnalyzer:
                 
                 # Erstelle VST-Liste mit Track-Details
                 vst_list = []
-                vst_list.append(f"PROJEKTPFAD: {project['path']}")
+                vst_list.append(f"PROJECT PATH: {project['path']}")
                 vst_list.append("=" * 60)
-                vst_list.append(f"VST-Liste für Projekt: {project['name']}")
-                vst_list.append(f"Hauptverzeichnis: {main_dir}")
+                vst_list.append(f"VST List for Project: {project['name']}")
+                vst_list.append(f"Main Directory: {main_dir}")
                 vst_list.append(f"Tracks: {len(project['tracks'])}")
                 vst_list.append(f"Scenes: {project['scenes']}")
-                vst_list.append(f"Anzahl VSTs: {len(project['vsts'])}")
+                vst_list.append(f"VST Count: {len(project['vsts'])}")
                 vst_list.append("=" * 60)
                 
-                # Track-Details mit VSTs
+                # Track details with VSTs
                 if project['tracks']:
-                    vst_list.append("TRACK-DETAILS:")
+                    vst_list.append("TRACK DETAILS:")
                     vst_list.append("-" * 40)
                     for i, track in enumerate(project['tracks'], 1):
                         vst_list.append(f"{i}. [{track['type']}] {track['name']}")
@@ -432,13 +432,13 @@ class AbletonProjectAnalyzer:
                                     vst_info += f" [Version: {vst['version']}]"
                                 vst_list.append(vst_info)
                         else:
-                            vst_list.append("   (Keine VSTs auf diesem Track)")
+                            vst_list.append("   (No VSTs on this track)")
                         vst_list.append("")
                 else:
-                    vst_list.append("Keine Tracks gefunden.")
+                    vst_list.append("No tracks found.")
                 
                 vst_list.append("=" * 60)
-                vst_list.append("ALLE VSTs (ÜBERSICHT):")
+                vst_list.append("ALL VSTs (OVERVIEW):")
                 vst_list.append("-" * 40)
                 if project['vsts']:
                     for i, vst in enumerate(project['vsts'], 1):
@@ -449,42 +449,42 @@ class AbletonProjectAnalyzer:
                             vst_info += f" [Version: {vst['version']}]"
                         vst_list.append(vst_info)
                 else:
-                    vst_list.append("Keine VSTs gefunden.")
+                    vst_list.append("No VSTs found.")
                 
                 vst_list.append("=" * 60)
-                vst_list.append(f"Erstellt am: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+                vst_list.append(f"Created: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
                 
                 # Schreibe Datei
                 try:
                     with open(txt_filepath, 'w', encoding='utf-8') as f:
                         f.write('\n'.join(vst_list))
                     exported_count += 1
-                    print(f"  VST-Liste erstellt: {txt_filename}")
+                    print(f"  VST list created: {txt_filename}")
                 except Exception as e:
-                    print(f"  Fehler beim Erstellen von {txt_filename}: {e}")
+                    print(f"  Error creating {txt_filename}: {e}")
             
-            print(f"  {exported_count} VST-Listen erstellt in: {main_dir}")
+            print(f"  {exported_count} VST lists created in: {main_dir}")
             total_exported += exported_count
         
-        # Erstelle Zusammenfassung
+        # Create summary
         self.create_recursive_summary(base_path, projects_by_main_dir)
         
-        # Erstelle VST-Bedarf-Liste für neuen PC
+        # Create VST requirements list for new PC
         self.create_vst_requirements_list(base_path, projects_by_main_dir)
         
-        print(f"\n[OK] Rekursive Inventur abgeschlossen!")
-        print(f"Insgesamt {total_exported} VST-Listen erstellt in {len(projects_by_main_dir)} Hauptverzeichnissen")
-        print(f"Gespeichert in: {base_path}")
+        print(f"\n[OK] Recursive inventory complete!")
+        print(f"Total {total_exported} VST lists created in {len(projects_by_main_dir)} main directories")
+        print(f"Saved in: {base_path}")
     
     def create_recursive_summary(self, base_path: Path, projects_by_main_dir: dict) -> None:
-        """Erstellt eine Zusammenfassung der rekursiven Inventur"""
-        summary_file = base_path / "00_INVENTUR_ZUSAMMENFASSUNG.txt"
+        """Creates a summary of the recursive inventory"""
+        summary_file = base_path / "00_INVENTORY_SUMMARY.txt"
         
         summary_lines = []
-        summary_lines.append("ABLETON STUDIO - VOLLSTÄNDIGE VST-INVENTUR")
+        summary_lines.append("ABLETON STUDIO - COMPLETE VST INVENTORY")
         summary_lines.append("=" * 60)
-        summary_lines.append(f"Erstellt am: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        summary_lines.append(f"Analysiertes Hauptverzeichnis: {self.project_path}")
+        summary_lines.append(f"Created: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        summary_lines.append(f"Analyzed main directory: {self.project_path}")
         summary_lines.append("=" * 60)
         
         total_projects = 0
@@ -493,9 +493,9 @@ class AbletonProjectAnalyzer:
         for main_dir, projects in projects_by_main_dir.items():
             summary_lines.append(f"\n📁 {main_dir.upper()}")
             summary_lines.append("-" * 40)
-            summary_lines.append(f"Projekte: {len(projects)}")
+            summary_lines.append(f"Projects: {len(projects)}")
             
-            # Sammle alle VSTs für dieses Hauptverzeichnis
+            # Collect all VSTs for this main directory
             main_dir_vsts = set()
             for project in projects:
                 total_projects += 1
@@ -504,42 +504,42 @@ class AbletonProjectAnalyzer:
                     main_dir_vsts.add(vst_key)
                     all_vsts_global.add(vst_key)
             
-            summary_lines.append(f"Verschiedene VSTs: {len(main_dir_vsts)}")
+            summary_lines.append(f"Different VSTs: {len(main_dir_vsts)}")
             if main_dir_vsts:
-                summary_lines.append("Verwendete VSTs:")
+                summary_lines.append("Used VSTs:")
                 for vst in sorted(main_dir_vsts):
                     summary_lines.append(f"  • {vst}")
         
         summary_lines.append("\n" + "=" * 60)
-        summary_lines.append("GESAMTÜBERSICHT")
+        summary_lines.append("OVERALL SUMMARY")
         summary_lines.append("=" * 60)
-        summary_lines.append(f"Gesamtprojekte: {total_projects}")
-        summary_lines.append(f"Hauptverzeichnisse: {len(projects_by_main_dir)}")
-        summary_lines.append(f"Verschiedene VSTs insgesamt: {len(all_vsts_global)}")
-        summary_lines.append("\nAlle verwendeten VSTs:")
+        summary_lines.append(f"Total projects: {total_projects}")
+        summary_lines.append(f"Main directories: {len(projects_by_main_dir)}")
+        summary_lines.append(f"Different VSTs total: {len(all_vsts_global)}")
+        summary_lines.append("\nAll used VSTs:")
         for vst in sorted(all_vsts_global):
             summary_lines.append(f"  • {vst}")
         
         summary_lines.append("\n" + "=" * 60)
-        summary_lines.append("VERZEICHNISSTRUKTUR")
+        summary_lines.append("DIRECTORY STRUCTURE")
         summary_lines.append("=" * 60)
         for main_dir, projects in projects_by_main_dir.items():
             summary_lines.append(f"{main_dir}/")
-            summary_lines.append(f"  └── {len(projects)} Projektdateien")
+            summary_lines.append(f"  └── {len(projects)} project files")
         
-        # Schreibe Zusammenfassung
+        # Write summary
         try:
             with open(summary_file, 'w', encoding='utf-8') as f:
                 f.write('\n'.join(summary_lines))
-            print(f"\n[INFO] Zusammenfassung erstellt: {summary_file}")
+            print(f"\n[INFO] Summary created: {summary_file}")
         except Exception as e:
-            print(f"Fehler beim Erstellen der Zusammenfassung: {e}")
+            print(f"Error creating summary: {e}")
     
     def create_vst_requirements_list(self, base_path: Path, projects_by_main_dir: dict) -> None:
-        """Erstellt eine VST-Bedarf-Liste für den neuen PC"""
-        requirements_file = base_path / "00_VST_BEDARF_FUER_NEUEN_PC.txt"
+        """Creates a VST requirements list for the new PC"""
+        requirements_file = base_path / "00_VST_REQUIREMENTS_FOR_NEW_PC.txt"
         
-        # Sammle alle VSTs mit Details
+        # Collect all VSTs with details
         all_vsts_detailed = {}
         total_projects = 0
         
@@ -564,38 +564,38 @@ class AbletonProjectAnalyzer:
                     all_vsts_detailed[vst_key]['projects'].add(project['name'])
                     all_vsts_detailed[vst_key]['main_dirs'].add(main_dir)
         
-        # Sortiere VSTs nach Häufigkeit der Verwendung
+        # Sort VSTs by usage frequency
         sorted_vsts = sorted(all_vsts_detailed.items(), 
                            key=lambda x: x[1]['usage_count'], reverse=True)
         
         requirements_lines = []
-        requirements_lines.append("VST-BEDARF FÜR NEUEN PC")
+        requirements_lines.append("VST REQUIREMENTS FOR NEW PC")
         requirements_lines.append("=" * 60)
-        requirements_lines.append(f"Erstellt am: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        requirements_lines.append(f"Analysierte Projekte: {total_projects}")
-        requirements_lines.append(f"Verschiedene VSTs gefunden: {len(all_vsts_detailed)}")
+        requirements_lines.append(f"Created: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        requirements_lines.append(f"Analyzed projects: {total_projects}")
+        requirements_lines.append(f"Different VSTs found: {len(all_vsts_detailed)}")
         requirements_lines.append("=" * 60)
         requirements_lines.append("")
-        requirements_lines.append("📋 INSTALLATIONSLISTE (sortiert nach Häufigkeit)")
+        requirements_lines.append("📋 INSTALLATION LIST (sorted by frequency)")
         requirements_lines.append("-" * 60)
         
         for i, (vst_key, details) in enumerate(sorted_vsts, 1):
             requirements_lines.append(f"{i:2d}. {vst_key}")
-            requirements_lines.append(f"    Hersteller: {details['manufacturer']}")
-            requirements_lines.append(f"    Plugin-Name: {details['name']}")
+            requirements_lines.append(f"    Manufacturer: {details['manufacturer']}")
+            requirements_lines.append(f"    Plugin Name: {details['name']}")
             if details['filename']:
-                requirements_lines.append(f"    Dateiname: {details['filename']}")
+                requirements_lines.append(f"    Filename: {details['filename']}")
             if details['version']:
                 requirements_lines.append(f"    Version: {details['version']}")
-            requirements_lines.append(f"    Verwendet in: {details['usage_count']} Projekten")
-            requirements_lines.append(f"    Hauptverzeichnisse: {', '.join(sorted(details['main_dirs']))}")
+            requirements_lines.append(f"    Used in: {details['usage_count']} projects")
+            requirements_lines.append(f"    Main directories: {', '.join(sorted(details['main_dirs']))}")
             requirements_lines.append("")
         
         requirements_lines.append("=" * 60)
-        requirements_lines.append("📊 STATISTIKEN")
+        requirements_lines.append("📊 STATISTICS")
         requirements_lines.append("=" * 60)
         
-        # Statistiken nach Hersteller
+        # Statistics by manufacturer
         manufacturer_stats = {}
         for vst_key, details in all_vsts_detailed.items():
             manufacturer = details['manufacturer']
@@ -604,46 +604,46 @@ class AbletonProjectAnalyzer:
             manufacturer_stats[manufacturer]['count'] += 1
             manufacturer_stats[manufacturer]['usage'] += details['usage_count']
         
-        requirements_lines.append("Nach Hersteller:")
+        requirements_lines.append("By Manufacturer:")
         for manufacturer, stats in sorted(manufacturer_stats.items(), 
                                         key=lambda x: x[1]['usage'], reverse=True):
-            requirements_lines.append(f"  • {manufacturer}: {stats['count']} Plugins, {stats['usage']} Verwendungen")
+            requirements_lines.append(f"  • {manufacturer}: {stats['count']} Plugins, {stats['usage']} usages")
         
         requirements_lines.append("")
-        requirements_lines.append("Nach Hauptverzeichnis:")
+        requirements_lines.append("By Main Directory:")
         for main_dir, projects in projects_by_main_dir.items():
             main_dir_vsts = set()
             for project in projects:
                 for vst in project['vsts']:
                     vst_key = f"{vst['manufacturer']} - {vst['name']}"
                     main_dir_vsts.add(vst_key)
-            requirements_lines.append(f"  • {main_dir}: {len(main_dir_vsts)} verschiedene VSTs")
+            requirements_lines.append(f"  • {main_dir}: {len(main_dir_vsts)} different VSTs")
         
         requirements_lines.append("")
         requirements_lines.append("=" * 60)
-        requirements_lines.append("💡 INSTALLATIONSHINWEISE")
+        requirements_lines.append("💡 INSTALLATION NOTES")
         requirements_lines.append("=" * 60)
-        requirements_lines.append("1. Installieren Sie zuerst die häufig verwendeten VSTs")
-        requirements_lines.append("2. Prüfen Sie die Kompatibilität mit Ihrer Ableton-Version")
-        requirements_lines.append("3. Sichern Sie Ihre Lizenzschlüssel vor der Installation")
-        requirements_lines.append("4. Testen Sie die VSTs nach der Installation in Ableton")
+        requirements_lines.append("1. Install the most frequently used VSTs first")
+        requirements_lines.append("2. Check compatibility with your Ableton version")
+        requirements_lines.append("3. Backup your license keys before installation")
+        requirements_lines.append("4. Test the VSTs in Ableton after installation")
         requirements_lines.append("")
-        requirements_lines.append("🔗 NÜTZLICHE LINKS:")
+        requirements_lines.append("🔗 USEFUL LINKS:")
         requirements_lines.append("• Native Instruments: https://www.native-instruments.com")
         requirements_lines.append("• FabFilter: https://www.fabfilter.com")
         requirements_lines.append("• iZotope: https://www.izotope.com")
         requirements_lines.append("• Youlean: https://youlean.co")
         
-        # Schreibe VST-Bedarf-Liste
+        # Write VST requirements list
         try:
             with open(requirements_file, 'w', encoding='utf-8') as f:
                 f.write('\n'.join(requirements_lines))
-            print(f"\n[INFO] VST-Bedarf-Liste erstellt: {requirements_file}")
+            print(f"\n[INFO] VST requirements list created: {requirements_file}")
         except Exception as e:
-            print(f"Fehler beim Erstellen der VST-Bedarf-Liste: {e}")
+            print(f"Error creating VST requirements list: {e}")
     
     def export_to_excel(self, filename: str = "ableton_vst_analysis.xlsx") -> None:
-        """Exportiert die Analyseergebnisse als übersichtliche Excel-Tabelle"""
+        """Exports analysis results as a comprehensive Excel spreadsheet"""
         try:
             # Convert to absolute path to ensure correct save location
             excel_path = Path(filename).resolve()
@@ -671,12 +671,12 @@ class AbletonProjectAnalyzer:
             # 5. Statistics
             self.create_statistics_sheet(wb)
             
-            # Speichere Excel-Datei
+            # Save Excel file
             wb.save(str(excel_path))
-            print(f"\n[INFO] Excel-Analyse erstellt: {excel_path}")
+            print(f"\n[INFO] Excel analysis created: {excel_path}")
             
         except Exception as e:
-            print(f"Fehler beim Erstellen der Excel-Datei: {e}")
+            print(f"Error creating Excel file: {e}")
     
     def create_project_overview_sheet(self, wb: Workbook) -> None:
         """Creates Project Overview Sheet"""
@@ -931,14 +931,14 @@ class AbletonProjectAnalyzer:
             ws.column_dimensions[column_letter].width = adjusted_width
 
 def main():
-    parser = argparse.ArgumentParser(description='Ableton Live Projekt-Analyzer - OPTIMIERT')
-    parser.add_argument('path', help='Pfad zu den Ableton-Projekten')
-    parser.add_argument('--json', help='Exportiere Ergebnisse als JSON')
-    parser.add_argument('--txt', action='store_true', help='Exportiere VST-Listen als Textdateien')
-    parser.add_argument('--excel', help='Exportiere Ergebnisse als Excel-Datei')
-    parser.add_argument('--recursive', action='store_true', help='Rekursive Analyse mit Unterverzeichnissen')
-    parser.add_argument('--quiet', action='store_true', help='Reduzierte Ausgabe')
-    parser.add_argument('--workers', type=int, default=16, help='Anzahl paralleler Threads (Standard: 16)')
+    parser = argparse.ArgumentParser(description='Ableton Live Project Analyzer - OPTIMIZED')
+    parser.add_argument('path', help='Path to Ableton projects')
+    parser.add_argument('--json', help='Export results as JSON')
+    parser.add_argument('--txt', action='store_true', help='Export VST lists as text files')
+    parser.add_argument('--excel', help='Export results as Excel file')
+    parser.add_argument('--recursive', action='store_true', help='Recursive analysis with subdirectories')
+    parser.add_argument('--quiet', action='store_true', help='Reduced output')
+    parser.add_argument('--workers', type=int, default=16, help='Number of parallel threads (default: 16)')
     
     args = parser.parse_args()
     
@@ -954,7 +954,7 @@ def main():
         if args.recursive:
             analyzer.export_vst_lists_recursive("vst_lists")
         else:
-            print("Verwenden Sie --recursive für VST-Listen-Export")
+            print("Use --recursive for VST lists export")
     
     if args.excel:
         analyzer.export_to_excel(args.excel)

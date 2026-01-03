@@ -15,109 +15,109 @@ This tool was created during a PC migration to help identify all VST plugins use
 
 ---
 
-## ✨ Hauptfeatures
+## ✨ Key Features
 
-### 🚀 Performance-Optimiert
-- **Multi-Threading**: Verarbeitet Hunderte von Projekten parallel
-- **Batch-Analyse**: Analysiert ganze Verzeichnisse rekursiv
-- **Optimierte Extraktion**: Schnelle XML-Extraktion für alle .als Formate
+### 🚀 Performance-Optimized
+- **Multi-Threading**: Processes hundreds of projects in parallel
+- **Batch Analysis**: Analyzes entire directories recursively
+- **Optimized Extraction**: Fast XML extraction for all .als formats
 
-### 📊 Umfassende Excel-Reports
-Erstellt detaillierte Excel-Dateien mit **5 Tabellenblättern**:
+### 📊 Comprehensive Excel Reports
+Creates detailed Excel files with **5 sheets**:
 
-1. **Projekt-Übersicht**
-   - Alle analysierten Projekte
-   - Pfad, Tracks, Scenes, VSTs
-   - Hauptverzeichnis-Gruppierung
+1. **Project Overview**
+   - All analyzed projects
+   - Path, Tracks, Scenes, VSTs
+   - Main directory grouping
 
-2. **VST-Übersicht**
-   - Alle verwendeten VST-Plugins
-   - Hersteller, Name, Dateiname, Version
-   - Projekt-Zuordnung
+2. **VST Overview**
+   - All used VST plugins
+   - Manufacturer, Name, Filename, Version
+   - Project assignment
 
-3. **Track-Details**
-   - Detaillierte Track-VST-Zuordnung
-   - Welche VSTs auf welchen Tracks verwendet werden
+3. **Track Details**
+   - Detailed track-VST mapping
+   - Which VSTs are used on which tracks
 
-4. **VST-Bedarf für neuen PC** ⭐
-   - Einzigartiges Feature!
-   - Erstellt Liste aller benötigten VSTs
-   - Sortiert nach Häufigkeit
-   - Perfekt für PC-Migration
+4. **VST Requirements for New PC** ⭐
+   - Unique feature!
+   - Creates list of all required VSTs
+   - Sorted by frequency
+   - Perfect for PC migration
 
-5. **Statistiken**
-   - Gesamtstatistiken (Projekte, Tracks, Scenes, VSTs)
-   - VST-Häufigkeit (welche VSTs werden am häufigsten verwendet)
-   - Hersteller-Statistiken
+5. **Statistics**
+   - Overall statistics (Projects, Tracks, Scenes, VSTs)
+   - VST frequency (which VSTs are used most frequently)
+   - Manufacturer statistics
 
-### 📁 Flexible Export-Optionen
-- **Excel**: Detaillierte Analyse mit 5 Sheets
-- **JSON**: Vollständige Projekt-Daten für weitere Verarbeitung
-- **TXT**: Rekursive VST-Listen nach Verzeichnissen organisiert
+### 📁 Flexible Export Options
+- **Excel**: Detailed analysis with 5 sheets
+- **JSON**: Complete project data for further processing
+- **TXT**: Recursive VST lists organized by directories
 
-### 🎯 Einfache Verwendung
+### 🎯 Easy to Use
 ```bash
-# Einfache Analyse
-python ableton_project_analyzer.py "Pfad\zu\Projekten"
+# Simple analysis
+python ableton_project_analyzer.py "Path\to\Projects"
 
-# Mit Excel-Export
-python ableton_project_analyzer.py "Pfad\zu\Projekten" --excel output.xlsx
+# With Excel export
+python ableton_project_analyzer.py "Path\to\Projects" --excel output.xlsx
 
-# Mit Multi-Threading (16 Threads)
-python ableton_project_analyzer.py "Pfad\zu\Projekten" --excel output.xlsx --workers 16
+# With multi-threading (16 threads)
+python ableton_project_analyzer.py "Path\to\Projects" --excel output.xlsx --workers 16
 ```
 
 ---
 
-## 📋 Systemanforderungen
+## 📋 System Requirements
 
-- **Python**: 3.6 oder höher
-- **Betriebssystem**: Windows, macOS, Linux
-- **Abhängigkeiten**: pandas, openpyxl
+- **Python**: 3.6 or higher
+- **Operating System**: Windows, macOS, Linux
+- **Dependencies**: pandas, openpyxl
 
 ---
 
 ## 🚀 Installation
 
 ```bash
-# 1. Repository klonen oder herunterladen
+# 1. Clone repository or download
 git clone <repository-url>
 cd ableton-project-analyzer
 
-# 2. Abhängigkeiten installieren
+# 2. Install dependencies
 pip install -r requirements.txt
 
-# 3. Fertig! Tool ist einsatzbereit
+# 3. Ready to use!
 python ableton_project_analyzer.py --help
 ```
 
 ---
 
-## 📖 Verwendung
+## 📖 Usage
 
-### Grundlegende Verwendung
+### Basic Usage
 ```bash
-python ableton_project_analyzer.py "Z:\Pfad\zu\Ableton\Projekten"
+python ableton_project_analyzer.py "Z:\Path\to\Ableton\Projects"
 ```
 
-### Mit Excel-Export
+### With Excel Export
 ```bash
-python ableton_project_analyzer.py "Z:\Pfad\zu\Projekten" --excel "C:\Temp\analyse.xlsx"
+python ableton_project_analyzer.py "Z:\Path\to\Projects" --excel "C:\Temp\analysis.xlsx"
 ```
 
-### Mit JSON-Export
+### With JSON Export
 ```bash
-python ableton_project_analyzer.py "Z:\Pfad\zu\Projekten" --json "output.json"
+python ableton_project_analyzer.py "Z:\Path\to\Projects" --json "output.json"
 ```
 
-### Mit VST-Listen-Export
+### With VST Lists Export
 ```bash
-python ableton_project_analyzer.py "Z:\Pfad\zu\Projekten" --txt --recursive
+python ableton_project_analyzer.py "Z:\Path\to\Projects" --txt --recursive
 ```
 
-### Alle Optionen
+### All Options
 ```bash
-python ableton_project_analyzer.py "Pfad" \
+python ableton_project_analyzer.py "Path" \
   --excel "output.xlsx" \
   --json "output.json" \
   --txt --recursive \
@@ -133,7 +133,7 @@ python ableton_project_analyzer.py "Pfad" \
 Analyze all your projects and create a complete list of all used VSTs.
 
 ### 2. Prepare PC Migration ⭐
-**This was the original use case that led to the development of this tool.** Use the "VST-Bedarf für neuen PC" (VST Requirements for New PC) sheet to see which VSTs you need to install on a new computer. This feature was specifically created for PC migration scenarios to simplify the process of setting up a new computer.
+**This was the original use case that led to the development of this tool.** Use the "VST Requirements for New PC" sheet to see which VSTs you need to install on a new computer. This feature was specifically created for PC migration scenarios to simplify the process of setting up a new computer.
 
 ### 3. Project Documentation
 Automatically create documentation for all your projects.
@@ -143,64 +143,63 @@ See which VSTs you use most frequently and which manufacturers dominate.
 
 ---
 
-## 🔧 Technische Details
+## 🔧 Technical Details
 
 ### Performance
-- **Multi-Threading**: Bis zu 16 parallele Threads (konfigurierbar)
-- **Batch-Verarbeitung**: Optimierte Verarbeitung großer Datenmengen
-- **Schnelle Extraktion**: Optimierte XML-Parsing-Methoden
+- **Multi-Threading**: Up to 16 parallel threads (configurable)
+- **Batch Processing**: Optimized processing of large datasets
+- **Fast Extraction**: Optimized XML parsing methods
 
-### Unterstützte Formate
-- ✅ .als (ZIP-Format) - Neue Ableton-Versionen
-- ✅ .als (GZIP-Format) - Ältere Ableton-Versionen
-- ✅ .als (XML-Format) - Sehr alte Ableton-Versionen
+### Supported Formats
+- ✅ .als (ZIP format) - New Ableton versions
+- ✅ .als (GZIP format) - Older Ableton versions
+- ✅ .als (XML format) - Very old Ableton versions
 
-### Fehlerbehandlung
-- Robuste Behandlung von beschädigten Projektdateien
-- Detaillierte Fehlermeldungen
-- Fortschrittsanzeige während der Analyse
-
----
-
-## 📝 Bekannte Einschränkungen
-
-- Sehr große Projekt-Sammlungen (>1000 Projekte) können einige Minuten dauern
-- Benötigt ausreichend RAM für große Analysen
-- Excel-Dateien können bei vielen Projekten groß werden
+### Error Handling
+- Robust handling of corrupted project files
+- Detailed error messages
+- Progress display during analysis
 
 ---
 
-## 🐛 Fehlerbehebung
+## 📝 Known Limitations
+
+- Very large project collections (>1000 projects) may take several minutes
+- Requires sufficient RAM for large analyses
+- Excel files can become large with many projects
+
+---
+
+## 🐛 Troubleshooting
 
 ### "ModuleNotFoundError: No module named 'pandas'"
 ```bash
 pip install -r requirements.txt
 ```
 
-### "Keine Ableton-Projekte gefunden!"
-- Überprüfen Sie den Pfad
-- Stellen Sie sicher, dass .als Dateien im Verzeichnis vorhanden sind
-- Verwenden Sie absolute Pfade
+### "No Ableton projects found!"
+- Check the path
+- Make sure .als files are present in the directory
+- Use absolute paths
 
-### Performance-Probleme
-- Reduzieren Sie die Anzahl der Threads: `--workers 4`
-- Verwenden Sie `--quiet` für weniger Ausgabe
-
----
-
-## 📄 Lizenz
-
-MIT License - Frei verwendbar für private und kommerzielle Zwecke.
+### Performance Issues
+- Reduce the number of threads: `--workers 4`
+- Use `--quiet` for less output
 
 ---
 
-## 🙏 Danksagungen
+## 📄 License
 
-Vielen Dank für die Nutzung des Ableton Live Project Analyzers!
-
-Bei Fragen oder Problemen erstellen Sie bitte ein Issue im Repository.
+MIT License - Free to use for private and commercial purposes.
 
 ---
 
-**Viel Erfolg mit Ihren Projekten!** 🎵
+## 🙏 Acknowledgments
 
+Thank you for using the Ableton Live Project Analyzer!
+
+If you have questions or problems, please create an issue in the repository.
+
+---
+
+**Good luck with your projects!** 🎵
