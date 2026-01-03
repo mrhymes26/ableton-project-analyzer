@@ -645,6 +645,12 @@ class AbletonProjectAnalyzer:
     def export_to_excel(self, filename: str = "ableton_vst_analysis.xlsx") -> None:
         """Exportiert die Analyseergebnisse als übersichtliche Excel-Tabelle"""
         try:
+            # Convert to absolute path to ensure correct save location
+            excel_path = Path(filename).resolve()
+            
+            # Create parent directory if it doesn't exist
+            excel_path.parent.mkdir(parents=True, exist_ok=True)
+            
             wb = Workbook()
             
             # Entferne Standard-Sheet
@@ -666,8 +672,8 @@ class AbletonProjectAnalyzer:
             self.create_statistics_sheet(wb)
             
             # Speichere Excel-Datei
-            wb.save(filename)
-            print(f"\n[INFO] Excel-Analyse erstellt: {filename}")
+            wb.save(str(excel_path))
+            print(f"\n[INFO] Excel-Analyse erstellt: {excel_path}")
             
         except Exception as e:
             print(f"Fehler beim Erstellen der Excel-Datei: {e}")
