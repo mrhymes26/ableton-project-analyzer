@@ -10,7 +10,7 @@ This tool was created during a PC migration to help identify all VST plugins use
 
 ## Features
 
-
+> **💡 Note:** This tool was created during a PC migration to help identify all VST plugins used across multiple Ableton Live projects. The "VST Requirements" feature helps you identify which plugins you need.
 
 ### 🚀 Performance-Optimized
 - ✅ **Multi-Threading**: Processes hundreds of projects in parallel (up to 16 threads)
@@ -21,7 +21,7 @@ This tool was created during a PC migration to help identify all VST plugins use
 1. **Project Overview** - All analyzed projects with details
 2. **VST Overview** - All used VST plugins
 3. **Track Details** - Detailed track-VST mapping
-4. **VST Requirements for New PC** ⭐ - Unique feature created specifically for PC migration scenarios
+4. **VST Requirements** ⭐ - Complete list of all required VST plugins with usage statistics
 5. **Statistics** ⭐ - Overall statistics, VST frequency, manufacturer analysis
 
 ### 📁 Flexible Export Options
@@ -41,13 +41,29 @@ This tool was created during a PC migration to help identify all VST plugins use
 ## 🚀 Quick Start (Easiest Way)
 
 ### Step 1: Install Dependencies (One Time Only)
+
+**Windows/Linux:**
 ```bash
 pip install pandas openpyxl
 ```
 
+**macOS:**
+```bash
+pip3 install pandas openpyxl
+```
+
+> **⚠️ macOS Users:** If you encounter Xcode license errors, run `sudo xcodebuild -license accept` first.
+
 ### Step 2: Run the Tool
+
+**Windows:**
 ```bash
 python ableton_project_analyzer.py "Z:\Path\to\Your\Projects" --excel "output.xlsx"
+```
+
+**macOS/Linux:**
+```bash
+python3 ableton_project_analyzer.py "/path/to/Your/Projects" --excel "output.xlsx"
 ```
 
 **That's it!** The Excel file will be created with all your project and VST information.
@@ -59,6 +75,7 @@ python ableton_project_analyzer.py "Z:\Path\to\Your\Projects" --excel "output.xl
 
 ## Installation
 
+### Windows/Linux
 ```bash
 # 1. Clone repository or download release
 git clone <repository>
@@ -70,6 +87,26 @@ pip install -r requirements.txt
 # 3. Ready to use!
 python ableton_project_analyzer.py --help
 ```
+
+### macOS
+```bash
+# 1. Clone repository or download release
+git clone <repository>
+cd ableton-project-analyzer-release
+
+# 2. Install dependencies
+pip3 install -r requirements.txt
+
+# 3. Ready to use!
+python3 ableton_project_analyzer.py --help
+```
+
+> **💡 macOS Note:** macOS comes with Python 3 pre-installed. Use `python3` and `pip3` commands instead of `python` and `pip`.
+>
+> **Alternative:** If you have Homebrew Python installed, you can use:
+> ```bash
+> /opt/homebrew/bin/python3 ableton_project_analyzer.py --help
+> ```
 
 ### System Requirements
 - **Python**: 3.6 or higher
@@ -89,33 +126,80 @@ The tool will:
 
 ### Basic Usage (Command Line)
 
+**Windows:**
 ```bash
 python ableton_project_analyzer.py "Z:\Path\to\Projects"
 ```
 
+**macOS/Linux:**
+```bash
+python3 ableton_project_analyzer.py "/path/to/Projects"
+```
+
 ### With Excel Export
 
+**Windows:**
 ```bash
 python ableton_project_analyzer.py "Z:\Path\to\Projects" --excel "C:\Temp\analysis.xlsx"
 ```
 
+**macOS/Linux:**
+```bash
+python3 ableton_project_analyzer.py "/path/to/Projects" --excel "~/Desktop/analysis.xlsx"
+```
+
 ### With JSON Export
 
+**Windows:**
 ```bash
 python ableton_project_analyzer.py "Z:\Path\to\Projects" --json results.json
 ```
 
+**macOS/Linux:**
+```bash
+python3 ableton_project_analyzer.py "/path/to/Projects" --json results.json
+```
+
 ### With VST Lists Export
 
+**Windows:**
 ```bash
 python ableton_project_analyzer.py "Z:\Path\to\Projects" --txt --recursive
 ```
 
+**macOS/Linux:**
+```bash
+python3 ableton_project_analyzer.py "/path/to/Projects" --txt --recursive
+```
+
 ### With Multi-Threading
 
+**Windows:**
 ```bash
 python ableton_project_analyzer.py "Z:\Path\to\Projects" --excel "output.xlsx" --workers 16
 ```
+
+**macOS/Linux:**
+```bash
+python3 ableton_project_analyzer.py "/path/to/Projects" --excel "output.xlsx" --workers 16
+```
+
+### Using Network/SMB Paths (macOS)
+
+The tool works with mounted network drives and SMB shares:
+
+```bash
+# If SMB share is mounted at /Volumes/data
+python3 ableton_project_analyzer.py "/Volumes/data/Projects" --excel "analysis.xlsx"
+
+# Example with SMB path
+python3 ableton_project_analyzer.py "/Volumes/data/04_Projekte/Musikproduktion/CAMPFIRE/Studio/_Resources/_Ideas Bin/" --recursive --txt
+```
+
+> **💡 Tip:** Mount SMB shares first using Finder (Go → Connect to Server) or command line:
+> ```bash
+> mount -t smbfs //username@server/share /Volumes/mountpoint
+> ```
 
 ### All Options
 
@@ -171,6 +255,40 @@ Total VSTs: 12
 • Waves - CLA-2A
 ```
 
+## Output Files
+
+### Excel Export
+Creates a single `.xlsx` file with 5 sheets containing all analysis data. The file is saved at the location you specify:
+```bash
+python3 ableton_project_analyzer.py "/path/to/Projects" --excel "~/Desktop/analysis.xlsx"
+```
+
+### JSON Export
+Creates a single JSON file with complete project data:
+```bash
+python3 ableton_project_analyzer.py "/path/to/Projects" --json "results.json"
+```
+
+### TXT Export (Recursive)
+When using `--txt --recursive`, the tool creates a `vst_lists/` directory in the current working directory with:
+- Individual VST list files for each project (organized by main directory)
+- `00_INVENTORY_SUMMARY.txt` - Complete inventory summary
+- `00_VST_REQUIREMENTS.txt` - VST requirements list
+
+**Example structure:**
+```
+vst_lists/
+├── 00_INVENTORY_SUMMARY.txt
+├── 00_VST_REQUIREMENTS.txt
+├── MainDirectory1/
+│   ├── Project1_VSTs.txt
+│   └── Project2_VSTs.txt
+└── MainDirectory2/
+    └── Project3_VSTs.txt
+```
+
+> **💡 Tip:** The output directory is created in the directory where you run the command, not in the project directory.
+
 ## JSON Export Format
 
 ```json
@@ -222,6 +340,7 @@ Total VSTs: 12
 - Check the path
 - Make sure .als files are present in the directory
 - Use absolute paths if you encounter problems
+- **macOS:** Make sure paths use forward slashes (`/`) not backslashes (`\`)
 
 ### "Error parsing XML file"
 - The project file might be corrupted
@@ -230,6 +349,67 @@ Total VSTs: 12
 ### "Warning: does not appear to be a valid Ableton project file"
 - The file might not be a real Ableton project file
 - Check the file extension (.als)
+
+### macOS-Specific Issues
+
+#### "You have not agreed to the Xcode license agreements"
+**Problem:** Python requires Xcode Command Line Tools license acceptance.
+
+**Solution:**
+```bash
+sudo xcodebuild -license accept
+```
+You'll be prompted for your password. After accepting, Python commands will work normally.
+
+#### "ModuleNotFoundError: No module named 'pandas'"
+**Problem:** Dependencies not installed or using wrong Python version.
+
+**Solution:**
+```bash
+# Make sure you're using pip3 on macOS
+pip3 install pandas openpyxl
+
+# Or install from requirements.txt
+pip3 install -r requirements.txt
+```
+
+#### "python: command not found" (macOS)
+**Problem:** macOS uses `python3` instead of `python`.
+
+**Solution:**
+- Always use `python3` instead of `python` on macOS
+- Use `pip3` instead of `pip` on macOS
+
+#### Network/SMB Path Issues (macOS)
+**Problem:** Cannot access network drives or SMB shares.
+
+**Solution:**
+1. Mount the network drive first using Finder:
+   - Go → Connect to Server (⌘K)
+   - Enter: `smb://server/share`
+   - Mount point will be in `/Volumes/`
+
+2. Use the mounted path:
+   ```bash
+   # Check if mounted
+   ls /Volumes/
+   
+   # Use the mounted path
+   python3 ableton_project_analyzer.py "/Volumes/mountname/path/to/projects"
+   ```
+
+3. Verify mount status:
+   ```bash
+   mount | grep smb
+   ```
+
+#### Permission Denied Errors
+**Problem:** Cannot read files or write output files.
+
+**Solution:**
+- Check file permissions: `ls -la /path/to/projects`
+- Make sure you have read access to project files
+- Make sure you have write access to output directory
 
 ## License
 
@@ -241,7 +421,7 @@ MIT License - Free to use for private and commercial purposes.
 
 If you find this tool helpful and would like to support its development, you can buy me a coffee:
 
-**[☕ Buy Me a Coffee](https://buymeacoffee.com/mrhymes)**
+**[☕ Buy Me a Coffee](https://buymeacoffee.com/mrhymes26)**
 
 Your support is greatly appreciated! 🙏
 

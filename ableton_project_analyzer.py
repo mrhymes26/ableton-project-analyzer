@@ -401,8 +401,12 @@ class AbletonProjectAnalyzer:
             exported_count = 0
             # Create all VST lists for this main directory in parallel
             for project in projects:
-                # Erstelle Dateiname basierend auf Projektname
-                safe_name = "".join(c for c in project['name'] if c.isalnum() or c in (' ', '-', '_')).rstrip()
+                # Erstelle Dateiname basierend auf Projektname (Windows-kompatibel)
+                # Entferne ungültige Zeichen für Windows: < > : " / \ | ? *
+                invalid_chars = '<>:"/\\|?*'
+                safe_name = "".join(c for c in project['name'] if (c.isalnum() or c in (' ', '-', '_')) and c not in invalid_chars).rstrip()
+                # Ersetze Leerzeichen durch Unterstriche für bessere Kompatibilität
+                safe_name = safe_name.replace(' ', '_')
                 txt_filename = f"{safe_name}_VSTs.txt"
                 txt_filepath = main_dir_path / txt_filename
                 
@@ -469,7 +473,7 @@ class AbletonProjectAnalyzer:
         # Create summary
         self.create_recursive_summary(base_path, projects_by_main_dir)
         
-        # Create VST requirements list for new PC
+        # Create VST requirements list
         self.create_vst_requirements_list(base_path, projects_by_main_dir)
         
         print(f"\n[OK] Recursive inventory complete!")
@@ -536,8 +540,8 @@ class AbletonProjectAnalyzer:
             print(f"Error creating summary: {e}")
     
     def create_vst_requirements_list(self, base_path: Path, projects_by_main_dir: dict) -> None:
-        """Creates a VST requirements list for the new PC"""
-        requirements_file = base_path / "00_VST_REQUIREMENTS_FOR_NEW_PC.txt"
+        """Creates a VST requirements list"""
+        requirements_file = base_path / "00_VST_REQUIREMENTS.txt"
         
         # Collect all VSTs with details
         all_vsts_detailed = {}
@@ -569,14 +573,14 @@ class AbletonProjectAnalyzer:
                            key=lambda x: x[1]['usage_count'], reverse=True)
         
         requirements_lines = []
-        requirements_lines.append("VST REQUIREMENTS FOR NEW PC")
+        requirements_lines.append("VST REQUIREMENTS")
         requirements_lines.append("=" * 60)
         requirements_lines.append(f"Created: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         requirements_lines.append(f"Analyzed projects: {total_projects}")
         requirements_lines.append(f"Different VSTs found: {len(all_vsts_detailed)}")
         requirements_lines.append("=" * 60)
         requirements_lines.append("")
-        requirements_lines.append("📋 INSTALLATION LIST (sorted by frequency)")
+        requirements_lines.append("📋 VST LIST (sorted by frequency)")
         requirements_lines.append("-" * 60)
         
         for i, (vst_key, details) in enumerate(sorted_vsts, 1):
@@ -665,7 +669,7 @@ class AbletonProjectAnalyzer:
             # 3. Track Details
             self.create_track_details_sheet(wb)
             
-            # 4. VST Requirements for New PC
+            # 4. VST Requirements
             self.create_vst_requirements_sheet(wb)
             
             # 5. Statistics
@@ -813,7 +817,7 @@ class AbletonProjectAnalyzer:
     
     def create_vst_requirements_sheet(self, wb: Workbook) -> None:
         """Creates VST Requirements Sheet"""
-        ws = wb.create_sheet("VST Requirements for New PC")
+        ws = wb.create_sheet("VST Requirements")
         
         # Collect VST statistics
         vst_stats = {}
