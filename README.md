@@ -24,7 +24,7 @@ This tool was created during a PC migration to help identify all VST plugins use
 1. **Project Overview** - All analyzed projects with complete paths, track count, scene count, VST count, and main directory grouping
 2. **VST Overview** - Complete list of all used VST plugins with manufacturer, plugin name, filename, version, and project assignment
 3. **Track Details** ⭐ - Detailed track-VST mapping with track types (Audio, MIDI, Return, Master), track names, and VST assignments
-4. **VST Requirements for New PC** ⭐ - Complete list of all required VST plugins sorted by usage frequency, perfect for PC migration
+4. **VST Requirements** ⭐ - Complete list of all required VST plugins sorted by usage frequency, perfect for PC migration
 5. **Statistics** ⭐ - Overall statistics (total projects, different VSTs, total tracks), averages, VST frequency analysis, and manufacturer statistics
 
 ### 📁 Flexible Export Options

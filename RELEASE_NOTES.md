@@ -47,7 +47,7 @@ Creates detailed Excel files with **5 sheets**:
    - Track names and VST assignments
    - VST count per track
 
-4. **VST Requirements for New PC** ⭐
+4. **VST Requirements** ⭐
    - Unique feature for PC migration!
    - Creates comprehensive list of all required VSTs
    - Sorted by usage frequency (most used first)
@@ -166,7 +166,7 @@ python ableton_project_analyzer.py "Path" \
 Analyze all your projects and create a complete list of all used VSTs.
 
 ### 2. Prepare PC Migration ⭐
-**This was the original use case that led to the development of this tool.** Use the "VST Requirements for New PC" sheet to see which VSTs you need to install on a new computer. This feature was specifically created for PC migration scenarios to simplify the process of setting up a new computer.
+**This was the original use case that led to the development of this tool.** Use the "VST Requirements" sheet to see which VSTs you need to install on a new computer. This feature was specifically created for PC migration scenarios to simplify the process of setting up a new computer.
 
 ### 3. Project Documentation
 Automatically create documentation for all your projects.

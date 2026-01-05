@@ -14,7 +14,7 @@ This tool was created during a PC migration to help identify all VST plugins use
   - Project Overview (all projects with details)
   - VST Overview (all used plugins)
   - Track Details (detailed track-VST mapping)
-  - VST Requirements for New PC (unique feature)
+  - VST Requirements (unique feature for PC migration)
   - Statistics (overall statistics, VST frequency, manufacturer analysis)
 - **JSON Export**: Complete project data as JSON
 - **Recursive VST Lists**: Exports VST lists organized by directories
