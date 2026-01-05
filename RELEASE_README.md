@@ -23,21 +23,25 @@ python ableton_project_analyzer.py "Z:\Path\to\Projects" --excel "output.xlsx"
 
 ## ✨ Key Features
 
-- ✅ **Multi-Threading**: Processes hundreds of projects in parallel (up to 16 threads)
+- ✅ **Multi-Threading**: Processes hundreds of projects in parallel (up to 16 threads, configurable)
+- ✅ **Thread-Safe**: Safe concurrent processing with proper locking mechanisms
+- ✅ **Batch Processing**: Optimized batch processing for better performance
+- ✅ **Progress Tracking**: Real-time progress updates during analysis
+- ✅ **Memory Efficient**: Optimized memory usage for large project collections
 - ✅ **Excel Export**: 5 comprehensive sheets with detailed analysis
 - ✅ **PC Migration Ready**: Special "VST Requirements for New PC" sheet
-- ✅ **Batch Processing**: Analyzes entire directories recursively
 - ✅ **Multiple Export Formats**: Excel, JSON, and TXT
+- ✅ **Automatic Format Detection**: Supports all .als formats (ZIP, GZIP, XML)
 
 ---
 
 ## 📊 Excel Export Includes
 
-1. **Project Overview** - All analyzed projects with details
-2. **VST Overview** - Complete list of all used VST plugins
-3. **Track Details** - Detailed track-VST mapping
-4. **VST Requirements for New PC** ⭐ - Perfect for PC migration
-5. **Statistics** - Overall statistics, VST frequency, manufacturer analysis
+1. **Project Overview** - All analyzed projects with complete paths, track count, scene count, VST count, and main directory grouping
+2. **VST Overview** - Complete list of all used VST plugins with manufacturer, plugin name, filename, version, and project assignment
+3. **Track Details** ⭐ - Detailed track-VST mapping with track types (Audio, MIDI, Return, Master), track names, and VST assignments
+4. **VST Requirements for New PC** ⭐ - Complete list of all required VST plugins sorted by usage frequency, perfect for PC migration
+5. **Statistics** ⭐ - Overall statistics (total projects, different VSTs, total tracks), averages, VST frequency analysis, and manufacturer statistics
 
 ---
 
@@ -52,7 +56,7 @@ This tool was created during a PC migration to help identify all VST plugins use
 - **Python**: 3.6 or higher
 - **Dependencies**: pandas, openpyxl
 - **Operating System**: Windows, macOS, Linux
-- **Ableton Live**: 9.x and higher
+- **Ableton Live**: 8.x and higher (supports all .als formats: ZIP, GZIP, XML)
 
 ---
 

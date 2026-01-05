@@ -250,4 +250,16 @@ If you have questions or problems, please create an issue in the repository.
 
 ---
 
+## ☕ Support
+
+If you find this tool helpful and would like to support its development, you can buy me a coffee:
+
+<a href="https://buymeacoffee.com/mrhymes" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+
+**[☕ Buy Me a Coffee](https://buymeacoffee.com/mrhymes)**
+
+Your support is greatly appreciated! 🙏
+
+---
+
 **Good luck with your projects!** 🎵

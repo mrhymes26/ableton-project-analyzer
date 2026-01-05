@@ -29,9 +29,10 @@ This tool was created during a PC migration to help identify all VST plugins use
 - Thread-safe implementation
 
 ### 📊 Supported Formats
-- .als (ZIP format) - New Ableton versions
-- .als (GZIP format) - Older Ableton versions
-- .als (XML format) - Very old Ableton versions
+- .als (ZIP format) - Live 10+ (New Ableton versions)
+- .als (GZIP format) - Live 9.x (Older Ableton versions)
+- .als (XML format) - Live 8 and earlier (Very old Ableton versions)
+- Automatic format detection - No manual configuration needed
 
 ### 🔧 Technical Details
 - Python 3.6+
