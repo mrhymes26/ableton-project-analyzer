@@ -104,6 +104,8 @@ python ableton_project_analyzer.py "Z:\Path\to\Projects" --excel "output.xlsx" -
 
 If you find this tool helpful, consider supporting its development:
 
+<a href="https://buymeacoffee.com/mrhymes" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+
 **[☕ Buy Me a Coffee](https://buymeacoffee.com/mrhymes)**
 
 ---
