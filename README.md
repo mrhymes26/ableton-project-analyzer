@@ -13,30 +13,47 @@ This tool was created during a PC migration to help identify all VST plugins use
 > **💡 Note:** This tool was created during a PC migration to help identify all VST plugins used across multiple Ableton Live projects. The "VST Requirements" feature helps you identify which plugins you need.
 
 ### 🚀 Performance-Optimized
-- ✅ **Multi-Threading**: Processes hundreds of projects in parallel (up to 16 threads)
-- ✅ **Batch Processing**: Optimized processing of large datasets
-- ✅ **Fast Extraction**: Optimized XML parsing methods
+- ✅ **Multi-Threading**: Processes hundreds of projects in parallel (up to 16 threads, configurable)
+- ✅ **Batch Processing**: Optimized batch processing for better performance
+- ✅ **Fast Extraction**: Optimized XML parsing methods with header detection
+- ✅ **Thread-Safe**: Safe concurrent processing with proper locking mechanisms
+- ✅ **Progress Tracking**: Real-time progress updates during analysis
+- ✅ **Memory Efficient**: Optimized memory usage for large project collections
 
 ### 📊 Excel Export with 5 Sheets
-1. **Project Overview** - All analyzed projects with details
-2. **VST Overview** - All used VST plugins
-3. **Track Details** - Detailed track-VST mapping
-4. **VST Requirements** ⭐ - Complete list of all required VST plugins with usage statistics
-5. **Statistics** ⭐ - Overall statistics, VST frequency, manufacturer analysis
+1. **Project Overview** - All analyzed projects with complete paths, track count, scene count, VST count, and main directory grouping
+2. **VST Overview** - Complete list of all used VST plugins with manufacturer, plugin name, filename, version, and project assignment
+3. **Track Details** ⭐ - Detailed track-VST mapping with track types (Audio, MIDI, Return, Master), track names, and VST assignments
+4. **VST Requirements for New PC** ⭐ - Complete list of all required VST plugins sorted by usage frequency, perfect for PC migration
+5. **Statistics** ⭐ - Overall statistics (total projects, different VSTs, total tracks), averages, VST frequency analysis, and manufacturer statistics
 
 ### 📁 Flexible Export Options
-- ✅ **Excel** (.xlsx) - Detailed analysis with 5 sheets
+- ✅ **Excel** (.xlsx) - Detailed analysis with 5 comprehensive sheets
+  - Color-coded headers for easy navigation
+  - Auto-sized columns for optimal readability
+  - Professional formatting with statistics
+  
 - ✅ **JSON** - Complete project data for further processing
+  - Includes timestamp and metadata
+  - All project details, tracks, and VST information
+  - Machine-readable format for automation
+  
 - ✅ **TXT** - Recursive VST lists organized by directories
+  - Individual VST list files per project
+  - Organized by main directories
+  - Includes track details with VST assignments
+  - Summary files: Inventory Summary and VST Requirements
 
 ### 🎯 Additional Features
 - 🔍 Automatic search for Ableton projects (.als files)
 - 📊 Analysis of project structure (Tracks, Scenes)
-- 🎛️ Extraction of all used VST plugins
+- 🎛️ Extraction of all used VST plugins with metadata (manufacturer, name, filename, version)
 - 📋 Detailed listing with manufacturer and plugin names
-- 🎯 User-friendly console output
+- 🎯 User-friendly console output with progress tracking
 - 🔄 Recursive search for .als files
-- 📁 Main directory grouping
+- 📁 Main directory grouping for better organization
+- 🛡️ Robust error handling - continues processing even if individual projects fail
+- 🔄 Support for multiple Ableton formats (ZIP, GZIP, XML) with automatic detection
 
 ## 🚀 Quick Start (Easiest Way)
 
@@ -207,12 +224,12 @@ python3 ableton_project_analyzer.py "/Volumes/data/04_Projekte/Musikproduktion/C
 python ableton_project_analyzer.py <path> [OPTIONS]
 
 Options:
-  --json <file>        Export results as JSON
-  --txt                Export VST lists as TXT
-  --excel <file>       Export as Excel
-  --recursive          Recursive analysis with subdirectories
-  --quiet              Reduced output
-  --workers <n>        Number of parallel threads (default: 16)
+  --json <file>        Export results as JSON (includes timestamp and metadata)
+  --txt                Export VST lists as TXT (requires --recursive)
+  --excel <file>       Export as Excel with 5 comprehensive sheets
+  --recursive          Recursive analysis with subdirectories (required for --txt)
+  --quiet              Reduced output (less verbose progress updates)
+  --workers <n>        Number of parallel threads (default: 16, recommended: 4-16)
 ```
 
 ## Example Output
@@ -323,16 +340,34 @@ vst_lists/
 
 ## Technical Details
 
-- **Ableton Project Format**: The tool analyzes .als files, which are actually ZIP archives containing XML files
-- **XML Parsing**: Uses Python's built-in `xml.etree.ElementTree` for analysis
-- **VST Extraction**: Searches for `PluginDevice` and `VstPluginInfo` elements in the project XML
-- **Error Handling**: Robust handling of corrupted or invalid project files
+### Project Format Support
+- **Ableton Project Format**: The tool analyzes .als files in multiple formats:
+  - ZIP archives (Live 10+) containing XML files
+  - GZIP compressed files (Live 9.x)
+  - Direct XML files (Live 8 and earlier)
+- **Automatic Format Detection**: No manual configuration needed - detects format automatically
+
+### Processing
+- **XML Parsing**: Uses Python's built-in `xml.etree.ElementTree` for fast analysis
+- **VST Extraction**: Searches for `VstPluginInfo` elements in the project XML
+- **Track Analysis**: Extracts track types (Audio, MIDI, Return, Master) and their VST assignments
+- **Multi-Threading**: Thread-safe implementation with proper locking mechanisms
+- **Batch Processing**: Optimized batch processing for better performance
+
+### Error Handling
+- **Robust Error Handling**: Graceful error recovery - continues processing even if individual projects fail
+- **Silent Error Handling**: Silent error handling for better performance
+- **Thread-Safe**: Thread-safe error handling for concurrent processing
 
 ## Compatibility
 
-- ✅ Ableton Live 9.x and higher
-- ✅ Windows, macOS, Linux
-- ✅ Python 3.6+
+- ✅ **Ableton Live**: 8.x and higher (supports all .als formats)
+  - Live 10+ (ZIP format)
+  - Live 9.x (GZIP format)
+  - Live 8 and earlier (XML format)
+- ✅ **Operating Systems**: Windows, macOS, Linux
+- ✅ **Python**: 3.6 or higher
+- ✅ **Network Paths**: Supports mounted network drives and SMB shares (macOS/Linux)
 
 ## Troubleshooting
 
@@ -345,6 +380,7 @@ vst_lists/
 ### "Error parsing XML file"
 - The project file might be corrupted
 - Try opening the project in Ableton Live and saving it again
+- The tool will automatically skip corrupted files and continue processing
 
 ### "Warning: does not appear to be a valid Ableton project file"
 - The file might not be a real Ableton project file
@@ -410,6 +446,15 @@ pip3 install -r requirements.txt
 - Check file permissions: `ls -la /path/to/projects`
 - Make sure you have read access to project files
 - Make sure you have write access to output directory
+
+### Performance Issues
+**Problem:** Analysis takes too long or uses too much memory.
+
+**Solution:**
+- Reduce the number of threads: `--workers 4` (default is 16)
+- Use `--quiet` for less output during analysis
+- For very large collections (>1000 projects), consider processing in smaller batches
+- Use JSON export instead of Excel for very large datasets to reduce memory usage
 
 ## License
 

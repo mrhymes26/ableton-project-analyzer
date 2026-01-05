@@ -18,42 +18,67 @@ This tool was created during a PC migration to help identify all VST plugins use
 ## ✨ Key Features
 
 ### 🚀 Performance-Optimized
-- **Multi-Threading**: Processes hundreds of projects in parallel
+- **Multi-Threading**: Processes hundreds of projects in parallel (up to 16 threads, configurable)
+- **Batch Processing**: Optimized batch processing for better performance
 - **Batch Analysis**: Analyzes entire directories recursively
 - **Optimized Extraction**: Fast XML extraction for all .als formats
+- **Thread-Safe**: Safe concurrent processing with proper locking mechanisms
+- **Progress Tracking**: Real-time progress updates during analysis
 
 ### 📊 Comprehensive Excel Reports
 Creates detailed Excel files with **5 sheets**:
 
 1. **Project Overview**
-   - All analyzed projects
-   - Path, Tracks, Scenes, VSTs
-   - Main directory grouping
+   - All analyzed projects with complete paths
+   - Track count, Scene count, VST count per project
+   - Main directory grouping for better organization
+   - Color-coded headers for easy navigation
 
 2. **VST Overview**
-   - All used VST plugins
-   - Manufacturer, Name, Filename, Version
-   - Project assignment
+   - Complete list of all used VST plugins
+   - Manufacturer, Plugin Name, Filename, Version
+   - Project assignment (which project uses which VST)
+   - Detailed plugin information extraction
 
-3. **Track Details**
+3. **Track Details** ⭐
    - Detailed track-VST mapping
+   - Track types: Audio, MIDI, Return, Master
    - Which VSTs are used on which tracks
+   - Track names and VST assignments
+   - VST count per track
 
 4. **VST Requirements for New PC** ⭐
-   - Unique feature!
-   - Creates list of all required VSTs
-   - Sorted by frequency
-   - Perfect for PC migration
+   - Unique feature for PC migration!
+   - Creates comprehensive list of all required VSTs
+   - Sorted by usage frequency (most used first)
+   - Shows usage count and project assignments
+   - Perfect for setting up a new computer
+   - Includes manufacturer, filename, and version information
 
 5. **Statistics**
-   - Overall statistics (Projects, Tracks, Scenes, VSTs)
-   - VST frequency (which VSTs are used most frequently)
-   - Manufacturer statistics
+   - Overall statistics (Total Projects, Different VSTs, Total Tracks)
+   - Average VSTs per project
+   - Average tracks per project
+   - VST frequency analysis (which VSTs are used most frequently)
+   - Manufacturer statistics with usage counts
 
 ### 📁 Flexible Export Options
-- **Excel**: Detailed analysis with 5 sheets
+- **Excel** (.xlsx): Detailed analysis with 5 comprehensive sheets
+  - Color-coded headers for easy navigation
+  - Auto-sized columns for optimal readability
+  - Professional formatting with statistics
+  
 - **JSON**: Complete project data for further processing
+  - Includes timestamp and metadata
+  - All project details, tracks, and VST information
+  - Machine-readable format for automation
+  
 - **TXT**: Recursive VST lists organized by directories
+  - Individual VST list files per project
+  - Organized by main directories
+  - Includes track details with VST assignments
+  - Summary files: Inventory Summary and VST Requirements
+  - Perfect for documentation and sharing
 
 ### 🎯 Easy to Use
 ```bash
@@ -125,6 +150,14 @@ python ableton_project_analyzer.py "Path" \
   --quiet
 ```
 
+### Advanced Features
+- **Track Details Extraction**: Automatically extracts track types (Audio, MIDI, Return, Master) and their VST assignments
+- **VST Metadata**: Extracts manufacturer, plugin name, filename, and version information
+- **Main Directory Grouping**: Organizes projects by main directories for better structure
+- **Recursive VST Lists**: Creates detailed VST lists with track information, organized by directories
+- **VST Requirements List**: Generates comprehensive requirements list sorted by frequency
+- **Inventory Summary**: Creates complete inventory summary with statistics
+
 ---
 
 ## 🎯 Use Cases
@@ -146,27 +179,36 @@ See which VSTs you use most frequently and which manufacturers dominate.
 ## 🔧 Technical Details
 
 ### Performance
-- **Multi-Threading**: Up to 16 parallel threads (configurable)
-- **Batch Processing**: Optimized processing of large datasets
-- **Fast Extraction**: Optimized XML parsing methods
+- **Multi-Threading**: Up to 16 parallel threads (configurable via `--workers`)
+- **Batch Processing**: Optimized batch processing of large datasets
+- **Fast Extraction**: Optimized XML parsing methods with header detection
+- **Thread-Safe Implementation**: Safe concurrent access with proper locking
+- **Progress Updates**: Real-time progress tracking (configurable frequency)
+- **Memory Efficient**: Optimized memory usage for large project collections
 
 ### Supported Formats
-- ✅ .als (ZIP format) - New Ableton versions
-- ✅ .als (GZIP format) - Older Ableton versions
-- ✅ .als (XML format) - Very old Ableton versions
+- ✅ .als (ZIP format) - New Ableton versions (Live 10+)
+- ✅ .als (GZIP format) - Older Ableton versions (Live 9.x)
+- ✅ .als (XML format) - Very old Ableton versions (Live 8 and earlier)
+- ✅ Automatic format detection - No manual configuration needed
 
 ### Error Handling
 - Robust handling of corrupted project files
-- Detailed error messages
+- Graceful error recovery - continues processing even if individual projects fail
+- Silent error handling for better performance
+- Detailed error messages when needed
 - Progress display during analysis
+- Thread-safe error handling
 
 ---
 
 ## 📝 Known Limitations
 
 - Very large project collections (>1000 projects) may take several minutes
-- Requires sufficient RAM for large analyses
-- Excel files can become large with many projects
+- Requires sufficient RAM for large analyses (recommended: 4GB+ for 500+ projects)
+- Excel files can become large with many projects (use JSON export for very large datasets)
+- Network paths (SMB) must be mounted before analysis (macOS/Linux)
+- Corrupted project files are skipped automatically (no manual intervention needed)
 
 ---
 
@@ -183,8 +225,14 @@ pip install -r requirements.txt
 - Use absolute paths
 
 ### Performance Issues
-- Reduce the number of threads: `--workers 4`
-- Use `--quiet` for less output
+- Reduce the number of threads: `--workers 4` (default is 16)
+- Use `--quiet` for less output during analysis
+- For very large collections, consider processing in smaller batches
+
+### Network/SMB Path Issues (macOS/Linux)
+- Mount network drives first using Finder or command line
+- Use mounted paths (e.g., `/Volumes/mountname/path`) instead of SMB URLs
+- Ensure proper read permissions on network shares
 
 ---
 
