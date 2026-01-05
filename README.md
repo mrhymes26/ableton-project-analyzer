@@ -310,11 +310,10 @@ vst_lists/
 
 ```json
 {
-  "summary": {
-    "total_projects": 3,
-    "total_vsts": 12,
-    "analyzed_path": "Z:\\Path\\to\\Projects"
-  },
+  "timestamp": "2026-01-03T12:34:56.789123",
+  "project_path": "Z:\\Path\\to\\Projects",
+  "total_projects": 3,
+  "total_vsts": 12,
   "projects": [
     {
       "name": "MyTrack",
@@ -323,11 +322,24 @@ vst_lists/
         {
           "name": "Massive",
           "manufacturer": "Native Instruments",
-          "path": "",
-          "id": ""
+          "filename": "Massive.dll",
+          "version": "1.5.0"
         }
       ],
-      "tracks": 8,
+      "tracks": [
+        {
+          "name": "Track 1",
+          "type": "Audio",
+          "vsts": [
+            {
+              "name": "Massive",
+              "manufacturer": "Native Instruments",
+              "filename": "Massive.dll",
+              "version": "1.5.0"
+            }
+          ]
+        }
+      ],
       "scenes": 4
     }
   ],
